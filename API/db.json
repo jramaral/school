@@ -1,0 +1,60 @@
+{
+  "professores": [
+    {
+      "id": 1,
+      "nome": "Jose",
+      "sobrenome": "Amaral"
+    },
+    {
+      "id": 2,
+      "nome": "Pedro",
+      "sobrenome": "Amaral"
+    },
+    {
+      "id": 3,
+      "nome": "Guilherme",
+      "sobrenome": "Amaral"
+    }
+  ],
+  "alunos": [
+    {
+      "id": 11,
+      "nome": "Mauricio",
+      "sobrenome": "SILVA",
+      "dataNasc": "",
+      "professor": {
+        "id": 3,
+        "nome": "Guilherme"
+      }
+    },
+    {
+      "id": 12,
+      "nome": "Eder",
+      "sobrenome": "SILVA",
+      "dataNasc": "27/05/1974",
+      "professor": {
+        "id": 3,
+        "nome": "Pedro"
+      }
+    },
+    {
+      "id": 13,
+      "nome": "Gustavo",
+      "sobrenome": "",
+      "dataNasc": "",
+      "professor": {
+        "id": 1,
+        "nome": "Pedro"
+      }
+    },
+    {
+      "id": 14,
+      "nome": "MARIA DA SILVA",
+      "sobrenome": "",
+      "professor": {
+        "id": 1,
+        "nome": "Jose"
+      }
+    }
+  ]
+}
