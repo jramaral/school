@@ -26,8 +26,8 @@
         <tr>
           <td class="colPequeno">Data nascimento</td>
           <td>
-            <label v-if="readOnly">{{ aluno.dataNasc }}</label>
-            <input v-else type="datetime" v-model="aluno.dataNasc" />
+            <label v-if="readOnly">{{ aluno.dataNascimento }}</label>
+            <input v-else type="datetime" v-model="aluno.dataNascimento" />
           </td>
         </tr>
         <tr>
@@ -71,13 +71,15 @@ export default {
     };
   },
   created() {
-    this.$http.get("http://localhost:3000/alunos/" + this.idAluno).then(res => {
-      console.log(res.data);
-      this.aluno = res.data;
-    });
+    this.$http
+      .get("http://localhost:5000/api/aluno/" + this.idAluno)
+      .then(res => {
+        console.log(res.data);
+        this.aluno = res.data;
+      });
 
     this.$http
-      .get("http://localhost:3000/professores")
+      .get("http://localhost:5000/api/professor")
       .then(res => res.json())
       .then(professor => (this.professores = professor));
   },
@@ -93,13 +95,13 @@ export default {
         id: aluno.id,
         nome: aluno.nome,
         sobrenome: aluno.sobrenome,
-        dataNasc: aluno.dataNasc,
-        professor: aluno.professor
+        dataNascimento: aluno.dataNascimento,
+        professorid: aluno.professor.id
       };
-      this.$http.put(
-        `http://localhost:3000/alunos/${aluEditado.id}`,
-        aluEditado
-      );
+      this.$http
+        .put(`http://localhost:5000/api/aluno/${aluEditado.id}`, aluEditado)
+        .then(res => res.json())
+        .then((aluno = this.aluno = aluno));
     }
   }
 };

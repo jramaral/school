@@ -36,6 +36,9 @@ options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoop
 
       //Injeção de dependencia
       services.AddScoped<IRepository, Repository>();
+
+      services.AddCors();
+
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,7 +53,10 @@ options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoop
 
       app.UseRouting();
 
+      app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+
       app.UseAuthorization();
+
 
       app.UseEndpoints(endpoints =>
       {

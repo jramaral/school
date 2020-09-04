@@ -21,7 +21,11 @@
         </tr>
       </tbody>
       <tfoot v-else>
-        <p>Não há registros</p>
+        <tr>
+          <td colspan="3" style="text-align: center">
+            <p>Não há registros</p>
+          </td>
+        </tr>
       </tfoot>
     </table>
   </div>
@@ -42,7 +46,7 @@ export default {
   props: {},
   created() {
     this.$http
-      .get("http://localhost:3000/alunos")
+      .get("http://localhost:5000/api/aluno")
       .then(res => res.json())
       .then(alu => {
         this.Alunos = alu;
@@ -63,7 +67,7 @@ export default {
       });
     },
     carregarProfessores() {
-      this.$http.get("http://localhost:3000/professores").then(res => {
+      this.$http.get("http://localhost:5000/api/professor").then(res => {
         this.professores = res.data;
         this.pegarQuantidadeAluno();
       });
