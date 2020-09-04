@@ -30,7 +30,12 @@ namespace aluno_API
       services.AddDbContext<DataContext>(
           x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection"))
       );
-      services.AddControllers();
+      //iguinorando o loop infinito
+      services.AddControllers().AddNewtonsoftJson(options =>
+options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+      //Injeção de dependencia
+      services.AddScoped<IRepository, Repository>();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

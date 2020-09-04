@@ -1,3 +1,7 @@
+using System.Threading.Tasks;
+using aluno_API.Data;
+using aluno_API.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace aluno_API.Controllers
@@ -6,34 +10,121 @@ namespace aluno_API.Controllers
   [ApiController]
   public class AlunoController : Controller
   {
-    public AlunoController()
+    public IRepository _repo { get; }
+    public AlunoController(IRepository repo)
     {
+      this._repo = repo;
 
     }
     [HttpGet]
-    public IActionResult Get()
+    public async Task<IActionResult> Get()
     {
-      return Ok();
+      try
+      {
+        var result = await _repo.GetAllAlunosAsync(true);
+        return Ok(result);
+      }
+      catch (System.Exception)
+      {
+
+        return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco de dados Falhou");
+      }
     }
     [HttpGet("{AlunoId}")]
-    public IActionResult Get(int AlunoId)
+    public async Task<IActionResult> Get(int AlunoId)
     {
-      return Ok();
+      try
+      {
+        var result = await _repo.GetAlunoAsyncById(AlunoId, true);
+        return Ok(result);
+
+      }
+      catch (System.Exception)
+      {
+
+        return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco de dados Falhou");
+      }
     }
+
+
+    [HttpGet("ByProfessor/{ProfessorId}")]
+    public async Task<IActionResult> GetByProfessorId(int ProfessorId)
+    {
+      try
+      {
+        var result = await _repo.GetAlunosAsyncByProfessorId(ProfessorId, true);
+        return Ok(result);
+
+      }
+      catch (System.Exception)
+      {
+
+        return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco de dados Falhou");
+      }
+    }
+
     [HttpPost]
-    public IActionResult Post()
+    public async Task<IActionResult> Post(Aluno model)
     {
-      return Ok();
+      try
+      {
+        _repo.Add(model);
+
+        if (await _repo.SaveChangeAsync())
+        {
+          return Created($"/api/aluno/{model.Id}", model);
+        }
+      }
+      catch (System.Exception)
+      {
+        return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco de dados Falhou");
+      }
+      return BadRequest();
     }
+
+
     [HttpPut("{AlunoId}")]
-    public IActionResult Put(int AlunoId)
+    public async Task<IActionResult> Put(int AlunoId, Aluno model)
     {
-      return Ok();
+      try
+      {
+        var aluno = await _repo.GetAlunoAsyncById(AlunoId, false);
+
+        if (aluno == null) return NotFound();
+        _repo.Update(model);
+
+        if (await _repo.SaveChangeAsync())
+        {
+          aluno = await _repo.GetAlunoAsyncById(AlunoId, true);
+          return Created($"/api/aluno/{model.Id}", model);
+        }
+      }
+      catch (System.Exception)
+      {
+        return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco de dados Falhou");
+      }
+      return BadRequest();
     }
     [HttpDelete("{AlunoId}")]
-    public IActionResult Delete(int AlunoId)
+    public async Task<IActionResult> Delete(int AlunoId)
     {
-      return Ok();
+      try
+      {
+        var aluno = await _repo.GetAlunoAsyncById(AlunoId, false);
+
+        if (aluno == null) return NotFound();
+        _repo.Delete(aluno);
+
+        if (await _repo.SaveChangeAsync())
+        {
+          return Ok();
+        }
+      }
+      catch (System.Exception)
+      {
+        return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco de dados Falhou");
+      }
+      return BadRequest();
     }
   }
 }
